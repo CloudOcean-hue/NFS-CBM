@@ -1,8 +1,0 @@
-{
-  "api_key": "",
-  "model": "gpt-5.4-2026-03-05",
-  "image_detail": "high",
-  "timeout_seconds": 180,
-  "max_output_tokens": 4096,
-  "max_retries": 3
-}

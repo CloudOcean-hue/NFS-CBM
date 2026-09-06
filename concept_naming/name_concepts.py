@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Name NFS-CBM concepts from paired reconstructions using OpenAI Responses.
+"""GPT-5.4 backend for the NFS-CBM all-dimension naming pipeline.
 
 Python 3.10+. Run --help for single-pair and manifest input modes.
-This module operates on exported intervention images after model training.
+The main entry point is pipeline.py. This module also retains a pair-level CLI.
 """
 from __future__ import annotations
 

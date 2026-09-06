@@ -1,0 +1,13 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+.env
+configs/naming_pipeline.json
+data/
+outputs/
+checkpoints/*
+!checkpoints/README.md
+*.pt
+*.pth
+*.ckpt
