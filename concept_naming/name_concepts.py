@@ -31,7 +31,8 @@ ENDPOINT = "https://api.openai.com/v1/responses"
 VERSION = "1.1.0"
 DEFAULT_MODEL = "gpt-5.4-2026-03-05"
 DEFAULTS = {"model": DEFAULT_MODEL, "api_key": "", "image_detail": "high",
-            "timeout_seconds": 180, "max_output_tokens": 4096, "max_retries": 3}
+            "reasoning_effort": "high", "timeout_seconds": 180,
+            "max_output_tokens": 4096, "max_retries": 3}
 CONTEXTS = {
     "cub": "CUB-200-2011 contains fine-grained bird categories. The target objects are birds.",
     "cars": "Stanford Cars contains fine-grained car categories. The target objects are cars.",
@@ -91,6 +92,8 @@ def load_config(path: Path | None) -> dict:
         raise NamingError("Use gpt-5.4-2026-03-05 or gpt-5.4 for this release.")
     if config["image_detail"] not in ("high", "original"):
         raise NamingError("image_detail must be high or original.")
+    if config["reasoning_effort"] not in ("none", "low", "medium", "high", "xhigh"):
+        raise NamingError("reasoning_effort must be none, low, medium, high or xhigh.")
     for name, lower, upper in [("timeout_seconds", 1, 3600),
                                ("max_output_tokens", 512, 32768), ("max_retries", 0, 8)]:
         val = config[name]
@@ -197,7 +200,7 @@ def build_request(job: dict, config: dict) -> tuple[dict, dict]:
     schema = json.loads(json.dumps(SCHEMA))
     schema["properties"]["concept_id"] = {"type": "string", "enum": [job["concept_id"]]}
     payload = {"model": config["model"], "store": False,
-               "reasoning": {"effort": "none"}, "temperature": 0,
+               "reasoning": {"effort": config["reasoning_effort"]},
                "max_output_tokens": config["max_output_tokens"],
                "input": [{"role": "user", "content": content}],
                "text": {"format": {"type": "json_schema", "name": "concept_name",

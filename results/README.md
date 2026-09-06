@@ -4,6 +4,4 @@
 
 ![Semantic statistics for all concept dimensions](semantic_statistics.svg)
 
-[Open the original vector PDF](semantic_statistics.pdf)
-
 The PDF is a result artifact. It is not an input to the naming pipeline.

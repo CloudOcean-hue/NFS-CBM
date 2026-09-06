@@ -45,4 +45,6 @@ The code release does not include trained weights or benchmark datasets.
 
 ## Full-run naming result
 
-The authors' all-dimension run is summarized in [results/semantic_statistics.pdf](results/semantic_statistics.pdf). Each dataset panel covers 128 concept units and reports the semantic-category distribution and repeated concept names.
+The authors' all-dimension run covers 128 concept units per dataset and reports the semantic-category distribution and repeated concept names.
+
+![Semantic statistics for the complete all-dimension run](results/semantic_statistics.svg)

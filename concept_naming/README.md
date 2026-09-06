@@ -45,7 +45,7 @@ Use `--resume` to keep completed concept names when rerunning an interrupted job
 
 ## Configuration
 
-The example fixes GPT-5.4 snapshot `gpt-5.4-2026-03-05`, image detail `high`, reasoning effort `none`, temperature `0`, five selected samples per dimension, and an additive perturbation of `1.0`. The manuscript defines `top_m` and the perturbation symbolically without reporting their numerical values. The example values are therefore configuration placeholders and must be replaced with the values used for the target checkpoint.
+The example fixes GPT-5.4 snapshot `gpt-5.4-2026-03-05`, image detail `high`, reasoning effort `high`, five selected samples per dimension, and an additive perturbation of `1.0`. The manuscript defines `top_m` and the perturbation symbolically without reporting their numerical values. The example values are therefore configuration placeholders and must be replaced with the values used for the target checkpoint.
 
 The perturbation value must match the setting used to produce the reported naming results. A negative value is accepted when the intended perturbation decreases the target dimension. The pipeline records the setting in `run_metadata.json`.
 
@@ -74,8 +74,6 @@ The dictionary contains every concept identifier, name, confidence value, defini
 The following vector figure summarizes the completed naming run for all 128 concept dimensions on each benchmark.
 
 ![Semantic statistics for the complete all-dimension run](../results/semantic_statistics.svg)
-
-[Open the original vector PDF](../results/semantic_statistics.pdf)
 
 ## Scope
 

@@ -46,8 +46,8 @@ class NamingTests(unittest.TestCase):
         self.assertIn('Image A', content[1]['text'])
         self.assertIn('Image B', content[3]['text'])
         self.assertIn('"concept_id": "test_000"', content[0]['text'])
-        self.assertEqual(payload['reasoning'], {'effort': 'none'})
-        self.assertEqual(payload['temperature'], 0)
+        self.assertEqual(payload['reasoning'], {'effort': 'high'})
+        self.assertNotIn('temperature', payload)
         self.assertNotIn('api_key', json.dumps(metadata))
         self.job['pairs'][0] = {'before': self.b, 'after': self.a}
         self.assertNotEqual(metadata['request_sha256'], naming.build_request(self.job, self.config)[1]['request_sha256'])

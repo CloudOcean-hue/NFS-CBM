@@ -61,6 +61,7 @@ class PipelineSmokeTest(unittest.TestCase):
                 "openai": {
                     "model": "gpt-5.4-2026-03-05",
                     "image_detail": "high",
+                    "reasoning_effort": "high",
                     "timeout_seconds": 30,
                     "max_output_tokens": 1024,
                     "max_retries": 0,

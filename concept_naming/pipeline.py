@@ -198,6 +198,7 @@ def main() -> int:
             "perturbation": config["perturbation"],
             "seed": config["seed"],
             "openai_model": config["openai"]["model"],
+            "reasoning_effort": config["openai"]["reasoning_effort"],
         }
         namer.save_json(output / "run_metadata.json", run_metadata)
 
