@@ -2,6 +2,10 @@
 
 This pipeline is an auxiliary analysis tool for a trained NFS-CBM. It names all concept dimensions from the visual changes produced by concept perturbation.
 
+## Pipeline
+
+![NFS-CBM automatic concept naming pipeline](../assets/naming_pipeline.png)
+
 For every test image, the exported model returns class logits and the non-negative concept vector `z`. For each concept dimension `k`, the pipeline selects the `top_m` test samples with the largest `z[k]`. It reconstructs each selected image twice: once with the original vector and once after changing only `z[k]` by the configured perturbation. GPT-5.4 receives the paired reconstructions, dataset context, concept identifier, and fixed naming prompt. One structured result is written for every dimension.
 
 ## Required local inputs
@@ -64,6 +68,14 @@ outputs/concept_naming/
 ```
 
 The dictionary contains every concept identifier, name, confidence value, definition, and supporting evidence. The image pairs remain the primary visual evidence.
+
+## Full-run result
+
+The following vector figure summarizes the completed naming run for all 128 concept dimensions on each benchmark.
+
+![Semantic statistics for the complete all-dimension run](../results/semantic_statistics.svg)
+
+[Open the original vector PDF](../results/semantic_statistics.pdf)
 
 ## Scope
 
