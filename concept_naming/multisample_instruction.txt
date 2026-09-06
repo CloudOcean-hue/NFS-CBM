@@ -1,0 +1,9 @@
+The following numbered pairs come from different samples of the same concept.
+Within each pair, Image A and Image B show the same sample before and after
+perturbing the same target concept dimension. Compare A with B within each pair.
+Summarize the recurring intervention-induced change across the supplied pairs.
+Return one concept-level JSON object using the fields in the fixed template.
+Use supporting_evidence to identify the pair numbers supporting the name.
+Record inconsistent effects and ambiguous pairs in uncertainty. Lower confidence
+when the evidence is inconsistent. Do not treat differences between samples as
+intervention effects. Use confidence high, medium, or low.
