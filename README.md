@@ -1,50 +1,36 @@
 # NFS-CBM
 
-This repository contains the inference and automatic concept-naming pipeline for **Non-negative Factorized Concept Bottleneck Models for Automatic Concept Discovery with Generative Models**.
+---
 
-The pipeline loads a trained NFS-CBM inference checkpoint, evaluates the test images, finds the most highly activated samples for every concept dimension, perturbs one dimension at a time, generates the corresponding reconstruction pairs, and asks GPT-5.4 to assign a semantic name. The checkpoint is intentionally excluded from Git.
+Non-negative Factorized Concept Bottleneck Models for Automatic Concept Discovery with Generative Models
 
-## Quick start
+---
 
-```bash
-python -m pip install -r requirements.txt
-cp configs/naming_pipeline.example.json configs/naming_pipeline.json
-python concept_naming/pipeline.py --config configs/naming_pipeline.json
-```
+*This repository contains the partial PyTorch source of NFS-CBM.*
 
-Edit two local paths in `configs/naming_pipeline.json` before running:
+> **Abstract**
+>
+> NFS-CBM is an end-to-end concept bottleneck model for automatic concept discovery and generative visual explanation. Its Factorized Semantic Bottleneck uses non-negative concept activations and a decorrelated global basis to organize discriminative visual information into compact concept units. A concept-conditioned diffusion generator maps these concepts to image-space interventions. After training, a vision-language model summarizes consistent intervention effects and assigns readable semantic names to the discovered concepts.
 
-- `checkpoint_path`: exported NFS-CBM inference checkpoint
-- `dataset_root`: test images arranged in class folders
+> **Method overview**
 
-Set the API key in the shell:
+<img src="assets/method_pipeline.svg" width="100%">
 
-```bash
-export OPENAI_API_KEY="your_api_key"
-```
+> **Main results**
+>
+> NFS-CBM is evaluated on CUB-200-2011, Stanford Cars, and ImageNet-100 with ResNet-50 and ViT-L/14 backbones. The main accuracy comparison is shown below.
 
-The default virtual checkpoint path is `checkpoints/nfs_cbm_inference.pt`. Checkpoint files, datasets, generated image pairs, API responses, and concept dictionaries are ignored by Git.
+<img src="assets/accuracy_table.svg" width="100%">
 
-See [concept_naming/README.md](concept_naming/README.md) for the checkpoint contract, complete configuration, and output files.
+- [ ] **To-do list**
+  - [x] Upload the partial PyTorch training entry
+  - [x] Present the NFS-CBM method overview
+  - [x] Present the main experimental results
+  - [ ] Release the complete model implementation
+  - [ ] Release the testing and evaluation code
+  - [ ] Release the automatic concept-naming pipeline
+  - [ ] Release configuration files and data preprocessing
+  - [ ] Release checkpoint specifications and pretrained weights
+  - [ ] Add complete installation and reproduction instructions
 
-## Repository layout
-
-```text
-model/
-  nfs_cbm.py                 NFS-CBM inference interface and FSB implementation
-concept_naming/
-  pipeline.py                Full all-dimension naming pipeline
-  name_concepts.py           GPT-5.4 request and structured-output backend
-  prompt_template.txt        Fixed execution prompt
-configs/
-  naming_pipeline.example.json
-checkpoints/                 Local weights; excluded from Git
-```
-
-The code release does not include trained weights or benchmark datasets.
-
-## Full-run naming result
-
-The authors' all-dimension run covers 128 concept units per dataset and reports the semantic-category distribution and repeated concept names.
-
-![Semantic statistics for the complete all-dimension run](results/semantic_statistics.svg)
+The remaining implementation will be released after publication.
