@@ -22,16 +22,6 @@ Non-negative Factorized Concept Bottleneck Models for Automatic Concept Discover
 
 <img src="assets/accuracy_table.svg" width="100%">
 
-> **Automatic concept naming**
->
-> The released naming pipeline loads an exported NFS-CBM inference checkpoint, selects high-activation samples for every concept dimension, generates original and perturbed reconstruction pairs, and uses GPT-5.4 to produce a complete concept dictionary.
-
-<img src="assets/naming_pipeline.png" width="100%">
-
-> **Semantic naming results**
-
-<img src="results/semantic_statistics.svg" width="100%">
-
 - [ ] **To-do list**
   - [x] Upload the partial PyTorch training entry
   - [x] Release the automatic concept-naming pipeline
