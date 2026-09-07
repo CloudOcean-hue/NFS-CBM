@@ -1,0 +1,20 @@
+{
+  "checkpoint_path": "checkpoints/nfs_cbm_inference.pt",
+  "dataset_root": "data/test",
+  "output_dir": "outputs/concept_naming",
+  "dataset_context": "CUB-200-2011 contains fine-grained bird categories. The target objects are birds.",
+  "image_size": 256,
+  "batch_size": 16,
+  "top_m": 5,
+  "perturbation": 1.0,
+  "device": "cuda",
+  "seed": 42,
+  "openai": {
+    "model": "gpt-5.4-2026-03-05",
+    "image_detail": "high",
+    "reasoning_effort": "high",
+    "timeout_seconds": 180,
+    "max_output_tokens": 4096,
+    "max_retries": 3
+  }
+}

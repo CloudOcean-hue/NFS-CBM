@@ -1,0 +1,6 @@
+config.local.json
+.env
+.venv/
+__pycache__/
+runs/
+.DS_Store

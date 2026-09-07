@@ -1,0 +1,38 @@
+You are given two images from a concept intervention.
+Image A: reconstruction before intervention.
+Image B: reconstruction after perturbing one concept unit.
+Dataset context: {dataset_context}
+Concept id: {concept_id}
+Use the dataset context only to understand the object type
+and possible object parts. Do not infer the concept name
+from dataset priors. The concept name must be supported by
+visible changes between Image A and Image B.
+Task:
+Name the learned visual concept represented by the change
+from Image A to Image B. Focus on the most stable
+fine-grained visual attribute or object part that
+changes consistently in Image B. Prefer
+concise attribute-part names such as "red crown",
+"striped wing", or "projector headlight". If the change is
+unclear or not localized to the target object, use a
+conservative name and lower the confidence.
+Ignore incidental changes that are not related to the
+target object or target concept, such as:
+- generation artifacts,
+- background texture changes,
+- small alignment or brightness shifts,
+- changes in unrelated regions.
+Return strict JSON:
+{
+"concept_id": "{concept_id}",
+"best_name": "...",
+"candidate_names": ["...", "...", "..."],
+"visual_changes": ["...", "...", "..."],
+"main_changed_part": "...",
+"main_attribute": "...",
+"definition": "...",
+"supporting_evidence": "...",
+"ignored_incidental_changes": ["...", "..."],
+"confidence": "high",
+"uncertainty": "..."
+}
