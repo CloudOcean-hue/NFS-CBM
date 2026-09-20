@@ -6,7 +6,7 @@ This pipeline is an auxiliary analysis tool for a trained NFS-CBM. It names all 
 
 ![NFS-CBM automatic concept naming pipeline](../assets/naming_pipeline.png)
 
-For every test image, the exported model returns class logits and the non-negative concept vector `z`. For each concept dimension `k`, the pipeline selects the `top_m` test samples with the largest `z[k]`. It reconstructs each selected image twice: once with the original vector and once after changing only `z[k]` by the configured perturbation. GPT-5.4 receives the paired reconstructions, dataset context, concept identifier, and fixed naming prompt. One structured result is written for every dimension.
+For every test image, the exported model returns class logits and the non-negative concept vector `z`. For each concept dimension `k`, the pipeline selects the `top_m` test samples with the largest `z[k]`. It reconstructs each selected image twice: once with the original vector and once after changing only `z[k]` by the configured perturbation. GPT-5.4 receives the paired reconstructions, dataset context, concept identifier, and fixed naming prompt. One structured result is written for every dimension. The same saved image pairs can alternatively be named with the fully local Qwen3-VL backend described below.
 
 ## Required local inputs
 
@@ -42,6 +42,92 @@ python concept_naming/pipeline.py --config configs/naming_pipeline.json --dry-ru
 ```
 
 Use `--resume` to keep completed concept names when rerunning an interrupted job.
+
+## Open-weight Qwen3-VL option
+
+`name_concepts_qwen.py` provides a local naming option based on the Apache-2.0-licensed [Qwen3-VL-8B-Instruct](https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct). It uses the model's own visual encoder and autoregressive language component to compare each intervention pair and generate the structured concept name. It does not require an OpenAI API key or send images to an external service.
+
+The released setup fixes the following model revision:
+
+```text
+Model: Qwen/Qwen3-VL-8B-Instruct
+Weights: https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct
+Revision: https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct/tree/0c351dd01ed87e9c1b53cbc748cba10e6187ff3b
+Commit: 0c351dd01ed87e9c1b53cbc748cba10e6187ff3b
+```
+
+### Install the local backend
+
+Use a separate environment so the Qwen dependencies do not alter the environment used to generate NFS-CBM intervention images:
+
+```bash
+python3.12 -m venv .venv-qwen
+source .venv-qwen/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r concept_naming/requirements_qwen.txt
+```
+
+Download the pinned weights into the Hugging Face cache:
+
+```bash
+hf download Qwen/Qwen3-VL-8B-Instruct \
+  --revision 0c351dd01ed87e9c1b53cbc748cba10e6187ff3b
+```
+
+The pinned requirements reproduce the tested CUDA 12.4 environment. If the host uses a different CUDA runtime, install the matching PyTorch build first and then install the remaining packages from `requirements_qwen.txt`.
+
+### Name all generated concepts locally
+
+First generate the intervention pairs with the existing NFS-CBM environment. `--dry-run` performs model inference and saves all image pairs without calling OpenAI:
+
+```bash
+python concept_naming/pipeline.py \
+  --config configs/naming_pipeline.json \
+  --dry-run
+```
+
+Then activate the Qwen environment and name those same pairs locally:
+
+```bash
+source .venv-qwen/bin/activate
+HF_HUB_OFFLINE=1 python concept_naming/name_concepts_qwen.py \
+  --pairs-root outputs/concept_naming/pairs \
+  --dataset cub \
+  --model Qwen/Qwen3-VL-8B-Instruct \
+  --revision 0c351dd01ed87e9c1b53cbc748cba10e6187ff3b \
+  --gpu 0 \
+  --max-pairs 5 \
+  --output outputs/concept_naming_qwen \
+  --resume
+```
+
+Use `--dataset cars` for Stanford Cars or `--dataset imagenet100` for ImageNet-100. An explicit description can instead be supplied with `--dataset-context`. The Qwen backend also accepts the same manifest format as `name_concepts.py`:
+
+```bash
+HF_HUB_OFFLINE=1 python concept_naming/name_concepts_qwen.py \
+  --manifest concept_naming/manifest.example.json \
+  --model Qwen/Qwen3-VL-8B-Instruct \
+  --gpu 0 \
+  --output outputs/concept_naming_qwen \
+  --resume
+```
+
+For one image pair:
+
+```bash
+HF_HUB_OFFLINE=1 python concept_naming/name_concepts_qwen.py \
+  --before path/to/image_A.png \
+  --after path/to/image_B.png \
+  --concept-id concept_000 \
+  --dataset cub \
+  --model Qwen/Qwen3-VL-8B-Instruct \
+  --gpu 0 \
+  --output outputs/concept_naming_qwen
+```
+
+The tested inference configuration uses FP16 weights without quantization, eager attention, RGB inputs with a maximum side length of 768 pixels, deterministic greedy decoding (`do_sample=False`), no temperature, top-p, or top-k sampling, and `max_new_tokens=512`. The default configuration was validated on one NVIDIA Tesla V100-SXM2 32 GB GPU. Use `--max-image-side` or `--max-pairs` to reduce memory use when necessary.
+
+The local output follows the existing naming format: `names.csv` and `names.md` summarize the concepts, while each checksum-named response directory stores `request_metadata.json`, `raw_output.txt`, and `result.json`. `--resume` reuses completed results, and `--dry-run` validates the image pairs without loading Qwen3-VL.
 
 ## Configuration
 
