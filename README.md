@@ -1,36 +1,29 @@
 # NFS-CBM
 
----
+Official PyTorch implementation of **Non-negative Factorized Concept Bottleneck Models for Automatic Concept Discovery with Generative Models**.
 
-Non-negative Factorized Concept Bottleneck Models for Automatic Concept Discovery with Generative Models
+## Abstract
 
----
+NFS-CBM is an end-to-end concept bottleneck model for automatic concept discovery and generative visual explanation. Its Factorized Semantic Bottleneck uses non-negative concept activations and a decorrelated global basis to organize discriminative visual information into compact concept units. A concept-conditioned diffusion generator maps these concepts to image-space interventions. After training, a vision-language model summarizes consistent intervention effects and assigns readable semantic names to the discovered concepts.
 
-*This repository contains the partial PyTorch training source and the automatic concept-naming pipeline of NFS-CBM.*
-
-> **Abstract**
->
-> NFS-CBM is an end-to-end concept bottleneck model for automatic concept discovery and generative visual explanation. Its Factorized Semantic Bottleneck uses non-negative concept activations and a decorrelated global basis to organize discriminative visual information into compact concept units. A concept-conditioned diffusion generator maps these concepts to image-space interventions. After training, a vision-language model summarizes consistent intervention effects and assigns readable semantic names to the discovered concepts.
-
-> **Method overview**
+## Method Overview
 
 <img src="assets/method_pipeline.svg" width="100%">
 
-> **Main results**
->
-> NFS-CBM is evaluated on CUB-200-2011, Stanford Cars, and ImageNet-100 with ResNet-50 and ViT-L/14 backbones. The main accuracy comparison is shown below.
+## Main Results
+
+NFS-CBM is evaluated on CUB-200-2011, Stanford Cars, and ImageNet-100 with ResNet-50 and ViT-L/14 backbones. The main accuracy comparison is shown below.
 
 <img src="assets/accuracy_table.svg" width="100%">
 
-- [ ] **To-do list**
-  - [x] Upload the partial PyTorch training entry
-  - [x] Release the automatic concept-naming pipeline
-  - [x] Present the NFS-CBM method overview
-  - [x] Present the main experimental results
-  - [ ] Release the complete model implementation
-  - [ ] Release the testing and evaluation code
-  - [ ] Release training configuration files and data preprocessing
-  - [ ] Release pretrained weights
-  - [ ] Add complete installation and reproduction instructions
+## Concept Naming
 
-The remaining implementation will be released after publication.
+The [automatic concept-naming pipeline](concept_naming/) selects the **5 highest-activation samples per concept** by default and uses their before/after intervention pairs to assign a semantic name. Both GPT and local Qwen3-VL naming backends are supported.
+
+## To-do
+
+- [x] Release the concept-naming pipeline.
+- [ ] Release the full training and evaluation code.
+- [ ] Release pretrained models and reproduction instructions.
+
+The full code and pretrained models will be released after publication.
