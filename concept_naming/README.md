@@ -6,7 +6,7 @@ This pipeline is an auxiliary analysis tool for a trained NFS-CBM. It names all 
 
 ![NFS-CBM automatic concept naming pipeline](../assets/naming_pipeline.png)
 
-For every test image, the exported model returns class logits and the non-negative concept vector `z`. For each concept dimension `k`, the pipeline selects the `top_m` test samples with the largest `z[k]`. It reconstructs each selected image twice: once with the original vector and once after changing only `z[k]` by the configured perturbation. GPT-5.4 receives the paired reconstructions, dataset context, concept identifier, and fixed naming prompt. One structured result is written for every dimension. The same saved image pairs can alternatively be named with the fully local Qwen3-VL backend described below.
+For every test image, the exported model returns class logits and the non-negative concept vector `z`. For each concept dimension `k`, the pipeline selects the `top_m` test samples with the largest `z[k]` (**5 samples per concept by default**). Each selected sample contributes one before/after image pair; if fewer than five test images are available, all available images are used. It reconstructs each selected image twice: once with the original vector and once after changing only `z[k]` by the configured perturbation. GPT-5.4 receives the paired reconstructions, dataset context, concept identifier, and fixed naming prompt. One structured result is written for every dimension. The same saved image pairs can alternatively be named with the fully local Qwen3-VL backend described below.
 
 ## Required local inputs
 
@@ -131,7 +131,9 @@ The local output follows the existing naming format: `names.csv` and `names.md` 
 
 ## Configuration
 
-The example fixes GPT-5.4 snapshot `gpt-5.4-2026-03-05`, image detail `high`, reasoning effort `high`, five selected samples per dimension, and an additive perturbation of `1.0`. The manuscript defines `top_m` and the perturbation symbolically without reporting their numerical values. The example values are therefore configuration placeholders and must be replaced with the values used for the target checkpoint.
+By default, `top_m=5`: the pipeline selects the five highest-activation test samples independently for each concept dimension. Omitting `top_m` from the configuration also uses 5. The local Qwen3-VL backend defaults to `--max-pairs 5` when reading generated pair folders. Both settings can be overridden explicitly.
+
+The example uses GPT-5.4 snapshot `gpt-5.4-2026-03-05`, image detail `high`, reasoning effort `high`, and an additive perturbation of `1.0`. Set the perturbation to the value used for the target checkpoint and experiment.
 
 The perturbation value must match the setting used to produce the reported naming results. A negative value is accepted when the intended perturbation decreases the target dimension. The pipeline records the setting in `run_metadata.json`.
 
