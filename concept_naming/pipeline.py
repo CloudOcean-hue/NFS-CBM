@@ -45,6 +45,8 @@ def load_config(path: Path) -> dict[str, Any]:
         config = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError) as exc:
         raise PipelineError(f"Cannot read configuration: {path}") from exc
+    if isinstance(config, dict):
+        config.setdefault("top_m", 5)
     required = {"checkpoint_path", "dataset_root", "output_dir", "dataset_context",
                 "image_size", "batch_size", "top_m", "perturbation", "device",
                 "seed", "openai"}
