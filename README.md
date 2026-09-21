@@ -8,7 +8,7 @@ NFS-CBM is an end-to-end concept bottleneck model for automatic concept discover
 
 ## Method Overview
 
-<img src="assets/method_pipeline.svg" width="100%">
+<a href="assets/method_pipeline.svg"><img src="assets/method_pipeline.png" width="100%" alt="NFS-CBM method overview"></a>
 
 ## Main Results
 
